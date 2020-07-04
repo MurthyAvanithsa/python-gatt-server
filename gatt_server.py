@@ -574,7 +574,7 @@ class AppearanceCharacteristic(Characteristic):
 
     def ReadValue(self, options):
         print('AppearanceCharacteristic Read: ' + repr(self.value))
-
+        return self.value
 
 def register_app_cb():
     print('GATT application registered')
