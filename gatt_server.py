@@ -452,7 +452,7 @@ class FidoControlPointCharacteristic(Characteristic):
         Characteristic.__init__(
             self, bus, index,
             self.TEST_CHRC_UUID,
-            ["encrypt-write"],
+            ['write'],
             service)
         self.value = []
 
@@ -490,7 +490,7 @@ class U2FControlPointLengthCharacteristic(Characteristic):
         Characteristic.__init__(
             self, bus, index,
             self.TEST_CHRC_UUID,
-            ['encrypt-read'],
+            ['read'],
             service)
         self.value = []
 
@@ -511,7 +511,7 @@ class U2FServiceRevisionCharacteristic(Characteristic):
         Characteristic.__init__(
             self, bus, index,
             self.TEST_CHRC_UUID,
-            ['encrypt-read',"encrypt-write"],
+            ['read',"write"],
             service)
         self.value = []
 
@@ -519,9 +519,6 @@ class U2FServiceRevisionCharacteristic(Characteristic):
         print('TestCharacteristic Read: ' + repr(self.value))
         return self.value
 
-    def WriteValue(self, value, options):
-        print('TestCharacteristic Write: ' + repr(value))
-        self.value = value
 
 
 def register_app_cb():
