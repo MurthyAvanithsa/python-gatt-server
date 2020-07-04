@@ -452,7 +452,7 @@ class FidoControlPointCharacteristic(Characteristic):
         Characteristic.__init__(
             self, bus, index,
             self.TEST_CHRC_UUID,
-            ['write'],
+            ["encrypt-write"],
             service)
         self.value = []
 
@@ -490,7 +490,7 @@ class U2FControlPointLengthCharacteristic(Characteristic):
         Characteristic.__init__(
             self, bus, index,
             self.TEST_CHRC_UUID,
-            ['read'],
+            ['encrypt-read'],
             service)
         self.value = []
 
@@ -511,7 +511,7 @@ class U2FServiceRevisionCharacteristic(Characteristic):
         Characteristic.__init__(
             self, bus, index,
             self.TEST_CHRC_UUID,
-            ['read',"write"],
+            ['encrypt-read',"encrypt-write"],
             service)
         self.value = []
 
