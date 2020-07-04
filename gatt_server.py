@@ -431,7 +431,7 @@ class FidoService(Service):
 
     def __init__(self, bus, index):
         Service.__init__(self, bus, index, self.TEST_SVC_UUID, True)
-        self.add_characteristic(TestCharacteristic(bus, 0, self))
+        self.add_characteristic(FidoControlPointCharacteristic(bus, 0, self))
 
 class FidoControlPointCharacteristic(Characteristic):
     """
