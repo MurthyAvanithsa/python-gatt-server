@@ -427,7 +427,7 @@ class TestService(Service):
     exercise various API functionality.
 
     """
-    TEST_SVC_UUID = '12345678-1234-5678-1234-56789abcdef0'
+    TEST_SVC_UUID = '0xFFFD'
 
     def __init__(self, bus, index):
         Service.__init__(self, bus, index, self.TEST_SVC_UUID, True)
@@ -441,7 +441,7 @@ class TestCharacteristic(Characteristic):
     contains "extended properties", as well as a test descriptor.
 
     """
-    TEST_CHRC_UUID = '12345678-1234-5678-1234-56789abcdef1'
+    TEST_CHRC_UUID = 'F1D0FFF1-DEAA-ECEE-B42F-C9BA7ED623BB'
 
     def __init__(self, bus, index, service):
         Characteristic.__init__(
