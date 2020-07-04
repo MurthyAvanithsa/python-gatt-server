@@ -519,6 +519,58 @@ class U2FServiceRevisionCharacteristic(Characteristic):
         print('TestCharacteristic Read: ' + repr(self.value))
         return self.value
 
+class AccessServiceProfileService(Service):
+    """
+    Dummy test service that provides characteristics and descriptors that
+    exercise various API functionality.
+
+    """
+    TEST_SVC_UUID = '0x1800'
+
+    def __init__(self, bus, index):
+        Service.__init__(self, bus, index, self.TEST_SVC_UUID, True)
+        self.add_characteristic(FidoControlPointCharacteristic(bus, 0, self))
+
+
+class DeviceNameRevisionCharacteristic(Characteristic):
+    """
+    Dummy test characteristic. Allows writing arbitrary bytes to its value, and
+    contains "extended properties", as well as a test descriptor.
+
+    """
+    TEST_CHRC_UUID = '0x2A00'
+
+    def __init__(self, bus, index, service):
+        Characteristic.__init__(
+            self, bus, index,
+            self.TEST_CHRC_UUID,
+            ['read'],
+            service)
+        self.value = []
+
+    def ReadValue(self, options):
+        print('DeviceNameRevisionCharacteristic Read: ' + repr(self.value))
+        return [dbus.Byte('raspberry')]
+
+
+class AppearanceCharacteristic(Characteristic):
+    """
+    Dummy test characteristic. Allows writing arbitrary bytes to its value, and
+    contains "extended properties", as well as a test descriptor.
+
+    """
+    TEST_CHRC_UUID = '0x2A01'
+
+    def __init__(self, bus, index, service):
+        Characteristic.__init__(
+            self, bus, index,
+            self.TEST_CHRC_UUID,
+            ['read'],
+            service)
+        self.value = []
+
+    def ReadValue(self, options):
+        print('AppearanceCharacteristic Read: ' + repr(self.value))
 
 
 def register_app_cb():
