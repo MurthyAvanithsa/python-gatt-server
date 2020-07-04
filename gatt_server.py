@@ -9,9 +9,9 @@ import array
 import functools
 
 try:
-  from gi.repository import GObject
+    from gi.repository import GObject
 except ImportError:
-  import gobject as GObject
+    import gobject as GObject
 
 from random import randint
 
@@ -28,15 +28,15 @@ LE_ADVERTISEMENT_IFACE = 'org.bluez.LEAdvertisement1'
 GATT_MANAGER_IFACE = 'org.bluez.GattManager1'
 
 GATT_SERVICE_IFACE = 'org.bluez.GattService1'
-GATT_CHRC_IFACE =    'org.bluez.GattCharacteristic1'
-GATT_DESC_IFACE =    'org.bluez.GattDescriptor1'
-
+GATT_CHRC_IFACE = 'org.bluez.GattCharacteristic1'
+GATT_DESC_IFACE = 'org.bluez.GattDescriptor1'
 
 
 class Application(dbus.service.Object):
     """
     org.bluez.GattApplication1 interface implementation
     """
+
     def __init__(self, bus):
         self.path = '/'
         self.services = []
@@ -84,13 +84,13 @@ class Service(dbus.service.Object):
 
     def get_properties(self):
         return {
-                GATT_SERVICE_IFACE: {
-                        'UUID': self.uuid,
-                        'Primary': self.primary,
-                        'Characteristics': dbus.Array(
-                                self.get_characteristic_paths(),
-                                signature='o')
-                }
+            GATT_SERVICE_IFACE: {
+                'UUID': self.uuid,
+                'Primary': self.primary,
+                'Characteristics': dbus.Array(
+                    self.get_characteristic_paths(),
+                    signature='o')
+            }
         }
 
     def get_path(self):
@@ -122,6 +122,7 @@ class Characteristic(dbus.service.Object):
     """
     org.bluez.GattCharacteristic1 interface implementation
     """
+
     def __init__(self, bus, index, uuid, flags, service):
         self.path = service.path + '/char' + str(index)
         self.bus = bus
@@ -133,14 +134,14 @@ class Characteristic(dbus.service.Object):
 
     def get_properties(self):
         return {
-                GATT_CHRC_IFACE: {
-                        'Service': self.service.get_path(),
-                        'UUID': self.uuid,
-                        'Flags': self.flags,
-                        'Descriptors': dbus.Array(
-                                self.get_descriptor_paths(),
-                                signature='o')
-                }
+            GATT_CHRC_IFACE: {
+                'Service': self.service.get_path(),
+                'UUID': self.uuid,
+                'Flags': self.flags,
+                'Descriptors': dbus.Array(
+                    self.get_descriptor_paths(),
+                    signature='o')
+            }
         }
 
     def get_path(self):
@@ -168,8 +169,8 @@ class Characteristic(dbus.service.Object):
         return self.get_properties()[GATT_CHRC_IFACE]
 
     @dbus.service.method(GATT_CHRC_IFACE,
-                        in_signature='a{sv}',
-                        out_signature='ay')
+                         in_signature='a{sv}',
+                         out_signature='ay')
     def ReadValue(self, options):
         print('Default ReadValue called, returning error')
         raise exceptions.NotSupportedException()
@@ -199,6 +200,7 @@ class Descriptor(dbus.service.Object):
     """
     org.bluez.GattDescriptor1 interface implementation
     """
+
     def __init__(self, bus, index, uuid, flags, characteristic):
         self.path = characteristic.path + '/desc' + str(index)
         self.bus = bus
@@ -209,11 +211,11 @@ class Descriptor(dbus.service.Object):
 
     def get_properties(self):
         return {
-                GATT_DESC_IFACE: {
-                        'Characteristic': self.chrc.get_path(),
-                        'UUID': self.uuid,
-                        'Flags': self.flags,
-                }
+            GATT_DESC_IFACE: {
+                'Characteristic': self.chrc.get_path(),
+                'UUID': self.uuid,
+                'Flags': self.flags,
+            }
         }
 
     def get_path(self):
@@ -229,8 +231,8 @@ class Descriptor(dbus.service.Object):
         return self.get_properties()[GATT_DESC_IFACE]
 
     @dbus.service.method(GATT_DESC_IFACE,
-                        in_signature='a{sv}',
-                        out_signature='ay')
+                         in_signature='a{sv}',
+                         out_signature='ay')
     def ReadValue(self, options):
         print('Default ReadValue called, returning error')
         raise exceptions.NotSupportedException()
@@ -262,10 +264,10 @@ class HeartRateMeasurementChrc(Characteristic):
 
     def __init__(self, bus, index, service):
         Characteristic.__init__(
-                self, bus, index,
-                self.HR_MSRMT_UUID,
-                ['notify'],
-                service)
+            self, bus, index,
+            self.HR_MSRMT_UUID,
+            ['notify'],
+            service)
         self.notifying = False
         self.hr_ee_count = 0
 
@@ -281,12 +283,12 @@ class HeartRateMeasurementChrc(Characteristic):
             value.append(dbus.Byte((self.service.energy_expended >> 8) & 0xff))
 
         self.service.energy_expended = \
-                min(0xffff, self.service.energy_expended + 1)
+            min(0xffff, self.service.energy_expended + 1)
         self.hr_ee_count += 1
 
         print('Updating value: ' + repr(value))
 
-        self.PropertiesChanged(GATT_CHRC_IFACE, { 'Value': value }, [])
+        self.PropertiesChanged(GATT_CHRC_IFACE, {'Value': value}, [])
 
         return self.notifying
 
@@ -320,24 +322,25 @@ class BodySensorLocationChrc(Characteristic):
 
     def __init__(self, bus, index, service):
         Characteristic.__init__(
-                self, bus, index,
-                self.BODY_SNSR_LOC_UUID,
-                ['read'],
-                service)
+            self, bus, index,
+            self.BODY_SNSR_LOC_UUID,
+            ['read'],
+            service)
 
     def ReadValue(self, options):
         # Return 'Chest' as the sensor location.
-        return [ 0x01 ]
+        return [0x01]
+
 
 class HeartRateControlPointChrc(Characteristic):
     HR_CTRL_PT_UUID = '00002a39-0000-1000-8000-00805f9b34fb'
 
     def __init__(self, bus, index, service):
         Characteristic.__init__(
-                self, bus, index,
-                self.HR_CTRL_PT_UUID,
-                ['write'],
-                service)
+            self, bus, index,
+            self.HR_CTRL_PT_UUID,
+            ['write'],
+            service)
 
     def WriteValue(self, value, options):
         print('Heart Rate Control Point WriteValue called')
@@ -377,10 +380,10 @@ class BatteryLevelCharacteristic(Characteristic):
 
     def __init__(self, bus, index, service):
         Characteristic.__init__(
-                self, bus, index,
-                self.BATTERY_LVL_UUID,
-                ['read', 'notify'],
-                service)
+            self, bus, index,
+            self.BATTERY_LVL_UUID,
+            ['read', 'notify'],
+            service)
         self.notifying = False
         self.battery_lvl = 100
         GObject.timeout_add(5000, self.drain_battery)
@@ -389,8 +392,8 @@ class BatteryLevelCharacteristic(Characteristic):
         if not self.notifying:
             return
         self.PropertiesChanged(
-                GATT_CHRC_IFACE,
-                {'Value': [dbus.Byte(self.battery_lvl)] }, [])
+            GATT_CHRC_IFACE,
+            {'Value': [dbus.Byte(self.battery_lvl)]}, [])
 
     def drain_battery(self):
         if self.battery_lvl > 0:
@@ -432,6 +435,10 @@ class FidoService(Service):
     def __init__(self, bus, index):
         Service.__init__(self, bus, index, self.TEST_SVC_UUID, True)
         self.add_characteristic(FidoControlPointCharacteristic(bus, 0, self))
+        self.add_characteristic(FidoStatusPointCharacteristic(bus, 1, self))
+        self.add_characteristic(U2FControlPointLengthCharacteristic(bus, 2, self))
+        self.add_characteristic(U2FServiceRevisionCharacteristic(bus, 3, self))
+
 
 class FidoControlPointCharacteristic(Characteristic):
     """
@@ -443,10 +450,69 @@ class FidoControlPointCharacteristic(Characteristic):
 
     def __init__(self, bus, index, service):
         Characteristic.__init__(
-                self, bus, index,
-                self.TEST_CHRC_UUID,
-                ['read', 'write'],
-                service)
+            self, bus, index,
+            self.TEST_CHRC_UUID,
+            ['write'],
+            service)
+        self.value = []
+
+    def WriteValue(self, value, options):
+        print('TestCharacteristic Write: ' + repr(value))
+        self.value = value
+
+
+class FidoStatusPointCharacteristic(Characteristic):
+    """
+    Dummy test characteristic. Allows writing arbitrary bytes to its value, and
+    contains "extended properties", as well as a test descriptor.
+
+    """
+    TEST_CHRC_UUID = 'F1D0FFF2-DEAA-ECEE-B42F-C9BA7ED623BB'
+
+    def __init__(self, bus, index, service):
+        Characteristic.__init__(
+            self, bus, index,
+            self.TEST_CHRC_UUID,
+            ['notify'],
+            service)
+        self.value = []
+
+
+class U2FControlPointLengthCharacteristic(Characteristic):
+    """
+    Dummy test characteristic. Allows writing arbitrary bytes to its value, and
+    contains "extended properties", as well as a test descriptor.
+
+    """
+    TEST_CHRC_UUID = 'F1D0FFF3-DEAA-ECEE-B42F-C9BA7ED623BB'
+
+    def __init__(self, bus, index, service):
+        Characteristic.__init__(
+            self, bus, index,
+            self.TEST_CHRC_UUID,
+            ['read'],
+            service)
+        self.value = []
+
+    def ReadValue(self, options):
+        print('TestCharacteristic Read: ' + repr(self.value))
+        return self.value
+
+
+class U2FServiceRevisionCharacteristic(Characteristic):
+    """
+    Dummy test characteristic. Allows writing arbitrary bytes to its value, and
+    contains "extended properties", as well as a test descriptor.
+
+    """
+    TEST_CHRC_UUID = 'F1D0FFF4-DEAA-ECEE-B42F-C9BA7ED623BB'
+
+    def __init__(self, bus, index, service):
+        Characteristic.__init__(
+            self, bus, index,
+            self.TEST_CHRC_UUID,
+            ['read',"write"],
+            service)
         self.value = []
 
     def ReadValue(self, options):
@@ -456,9 +522,6 @@ class FidoControlPointCharacteristic(Characteristic):
     def WriteValue(self, value, options):
         print('TestCharacteristic Write: ' + repr(value))
         self.value = value
-
-
-
 
 
 def register_app_cb():
@@ -476,14 +539,13 @@ def gatt_server_main(mainloop, bus, adapter_name):
         raise Exception('GattManager1 interface not found')
 
     service_manager = dbus.Interface(
-            bus.get_object(BLUEZ_SERVICE_NAME, adapter),
-            GATT_MANAGER_IFACE)
+        bus.get_object(BLUEZ_SERVICE_NAME, adapter),
+        GATT_MANAGER_IFACE)
 
     app = Application(bus)
 
     print('Registering GATT application...')
 
     service_manager.RegisterApplication(app.get_path(), {},
-                                    reply_handler=register_app_cb,
-                                    error_handler=functools.partial(register_app_error_cb, mainloop))
-
+                                        reply_handler=register_app_cb,
+                                        error_handler=functools.partial(register_app_error_cb, mainloop))
