@@ -553,7 +553,7 @@ class DeviceNameRevisionCharacteristic(Characteristic):
 
     def ReadValue(self, options):
         print('DeviceNameRevisionCharacteristic Read: ' + repr(self.value))
-        return [dbus.Byte('raspberry')]
+        return []
 
 
 class AppearanceCharacteristic(Characteristic):
