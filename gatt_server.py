@@ -43,7 +43,9 @@ class Application(dbus.service.Object):
         dbus.service.Object.__init__(self, bus, self.path)
         # self.add_service(HeartRateService(bus, 0))
         # self.add_service(BatteryService(bus, 1))
-        self.add_service(FidoService(bus, 2))
+        self.add_service(FidoService(bus, 0))
+        self.add_service(AccessServiceProfileService(bus, 1))
+
 
     def get_path(self):
         return dbus.ObjectPath(self.path)
@@ -529,7 +531,8 @@ class AccessServiceProfileService(Service):
 
     def __init__(self, bus, index):
         Service.__init__(self, bus, index, self.TEST_SVC_UUID, True)
-        self.add_characteristic(FidoControlPointCharacteristic(bus, 0, self))
+        self.add_characteristic(DeviceNameRevisionCharacteristic(bus, 0, self))
+        self.add_characteristic(AppearanceCharacteristic(bus, 1, self))
 
 
 class DeviceNameRevisionCharacteristic(Characteristic):
