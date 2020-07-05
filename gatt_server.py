@@ -455,7 +455,7 @@ class U2FServiceRevisionBitFieldCharacteristic(Characteristic):
         self.value = []
 
     def ReadValue(self, options):
-        print('AppearanceCharacteristic Read: ' + repr(self.value))
+        print('U2FServiceRevisionBitFieldCharacteristic Read: ')
         return self.value
 
     def WriteValue(self, value, options):
@@ -473,9 +473,9 @@ class DeviceInfoService(Service):
     def __init__(self, bus, index):
         Service.__init__(self, bus, index, self.TEST_SVC_UUID, True)
 
-        self.add_characteristic(ManifacttureNameCharacteristic(bus, 1, self))
-        self.add_characteristic(ModeNameCharacteristic(bus, 3, self))
-        self.add_characteristic(FirmwareVersionCharacteristic(bus, 4, self))
+        self.add_characteristic(ManifacttureNameCharacteristic(bus, 0, self))
+        self.add_characteristic(ModeNameCharacteristic(bus, 1, self))
+        self.add_characteristic(FirmwareVersionCharacteristic(bus, 2, self))
 
 
 class ManifacttureNameCharacteristic(Characteristic):
