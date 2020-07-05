@@ -436,9 +436,9 @@ class FidoService(Service):
     def __init__(self, bus, index):
         Service.__init__(self, bus, index, self.TEST_SVC_UUID, True)
         #self.add_characteristic(FidoControlPointCharacteristic(bus, 0, self))
-        #self.add_characteristic(FidoStatusPointCharacteristic(bus, 1, self))
-        #self.add_characteristic(U2FControlPointLengthCharacteristic(bus, 2, self))
-        self.add_characteristic(U2FServiceRevisionCharacteristic(bus, 0, self))
+        #self.add_characteristic(FidoStatusPointCharacteristi(bus, 1, self))
+        self.add_characteristic(U2FControlPointLengthCharacteristic(bus, 2, self))
+        #self.add_characteristic(U2FServiceRevisionCharacteristic(bus, 0, self))
 
 
 class FidoControlPointCharacteristic(Characteristic):
