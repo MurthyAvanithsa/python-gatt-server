@@ -503,7 +503,7 @@ class FirmwareVersionCharacteristic(Characteristic):
         return self.value
 
 
-class FIDOService(Service):
+class FidoService(Service):
     """
     Dummy test service that provides characteristics and descriptors that
     exercise various API functionality.
