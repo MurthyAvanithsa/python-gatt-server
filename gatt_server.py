@@ -44,7 +44,7 @@ class Application(dbus.service.Object):
         # self.add_service(HeartRateService(bus, 0))
         # self.add_service(BatteryService(bus, 1))
         self.add_service(FidoService(bus, 0))
-        #self.add_service(DeviceInfoService(bus, 0))
+        # self.add_service(DeviceInfoService(bus, 0))
 
     def get_path(self):
         return dbus.ObjectPath(self.path)
@@ -425,43 +425,6 @@ class BatteryLevelCharacteristic(Characteristic):
         self.notifying = False
 
 
-class FidoService(Service):
-    """
-    Dummy test service that provides characteristics and descriptors that
-    exercise various API functionality.
-
-    """
-    FIDO_SVC_UUID = '0xFFFD'
-
-    def __init__(self, bus, index):
-        Service.__init__(self, bus, index, self.FIDO_SVC_UUID, True)
-        self.add_characteristic(U2FServiceRevisionBitFieldCharacteristic(bus, 0, self))
-
-
-class U2FServiceRevisionBitFieldCharacteristic(Characteristic):
-    """
-    Dummy test characteristic. Allows writing arbitrary bytes to its value, and
-    contains "extended properties", as well as a test descriptor.
-
-    """
-    TEST_CHRC_UUID = 'F1D0FFF4-DEAA-ECEE-B42F-C9BA7ED623BB'
-
-    def __init__(self, bus, index, service):
-        Characteristic.__init__(
-            self, bus, index,
-            self.TEST_CHRC_UUID,
-            ['read','write'],
-            service)
-        self.value = []
-
-    def ReadValue(self, options):
-        print('U2FServiceRevisionBitFieldCharacteristic Read: ')
-        return self.value
-
-    def WriteValue(self, value, options):
-        print('U2FServiceRevisionBitFieldCharacteristic Read: ' + repr(self.value))
-
-
 class DeviceInfoService(Service):
     """
     Dummy test service that provides characteristics and descriptors that
@@ -472,7 +435,6 @@ class DeviceInfoService(Service):
 
     def __init__(self, bus, index):
         Service.__init__(self, bus, index, self.TEST_SVC_UUID, True)
-
         self.add_characteristic(ManifacttureNameCharacteristic(bus, 0, self))
         self.add_characteristic(ModeNameCharacteristic(bus, 1, self))
         self.add_characteristic(FirmwareVersionCharacteristic(bus, 2, self))
@@ -527,6 +489,40 @@ class FirmwareVersionCharacteristic(Characteristic):
 
     """
     TEST_CHRC_UUID = '0x2A26'
+
+    def __init__(self, bus, index, service):
+        Characteristic.__init__(
+            self, bus, index,
+            self.TEST_CHRC_UUID,
+            ['read'],
+            service)
+        self.value = []
+
+    def ReadValue(self, options):
+        print('AppearanceCharacteristic Read: ' + repr(self.value))
+        return self.value
+
+
+class FIDOService(Service):
+    """
+    Dummy test service that provides characteristics and descriptors that
+    exercise various API functionality.
+
+    """
+    TEST_SVC_UUID = '0x180A'
+
+    def __init__(self, bus, index):
+        Service.__init__(self, bus, index, self.TEST_SVC_UUID, True)
+        self.add_characteristic(FIDOCHAR2Characteristic(bus, 0, self))
+
+
+class FIDOCHAR2Characteristic(Characteristic):
+    """
+    Dummy test characteristic. Allows writing arbitrary bytes to its value, and
+    contains "extended properties", as well as a test descriptor.
+
+    """
+    TEST_CHRC_UUID = 'f96efbaf-bba1-47cc-9afa-3a8330196ce2'
 
     def __init__(self, bus, index, service):
         Characteristic.__init__(
