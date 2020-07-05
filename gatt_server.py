@@ -44,8 +44,7 @@ class Application(dbus.service.Object):
         # self.add_service(HeartRateService(bus, 0))
         # self.add_service(BatteryService(bus, 1))
         self.add_service(FidoService(bus, 0))
-        #self.add_service(AccessServiceProfileService(bus, 1))
-
+        self.add_service(DeviceInfoService(bus, 1))
 
     def get_path(self):
         return dbus.ObjectPath(self.path)
@@ -513,7 +512,7 @@ class U2FServiceRevisionCharacteristic(Characteristic):
         Characteristic.__init__(
             self, bus, index,
             self.TEST_CHRC_UUID,
-            ['read',"write"],
+            ['read', "write"],
             service)
         self.value = []
 
@@ -521,7 +520,8 @@ class U2FServiceRevisionCharacteristic(Characteristic):
         print('TestCharacteristic Read: ' + repr(self.value))
         return self.value
 
-class AccessServiceProfileService(Service):
+
+class DeviceInfoService(Service):
     """
     Dummy test service that provides characteristics and descriptors that
     exercise various API functionality.
@@ -531,17 +531,19 @@ class AccessServiceProfileService(Service):
 
     def __init__(self, bus, index):
         Service.__init__(self, bus, index, self.TEST_SVC_UUID, True)
-        self.add_characteristic(DeviceNameRevisionCharacteristic(bus, 0, self))
-        self.add_characteristic(AppearanceCharacteristic(bus, 1, self))
+        self.add_characteristic(DeviceInfoCharacteristic(bus, 0, self))
+        self.add_characteristic(ManifacttureNameCharacteristic(bus, 1, self))
+        self.add_characteristic(ModeNameCharacteristic(bus, 3, self))
+        self.add_characteristic(FirmwareVersionCharacteristic(bus, 4, self))
 
 
-class DeviceNameRevisionCharacteristic(Characteristic):
+class DeviceInfoCharacteristic(Characteristic):
     """
     Dummy test characteristic. Allows writing arbitrary bytes to its value, and
     contains "extended properties", as well as a test descriptor.
 
     """
-    TEST_CHRC_UUID = '0x2A00'
+    TEST_CHRC_UUID = '0x180A'
 
     def __init__(self, bus, index, service):
         Characteristic.__init__(
@@ -556,13 +558,13 @@ class DeviceNameRevisionCharacteristic(Characteristic):
         return []
 
 
-class AppearanceCharacteristic(Characteristic):
+class ManifacttureNameCharacteristic(Characteristic):
     """
     Dummy test characteristic. Allows writing arbitrary bytes to its value, and
     contains "extended properties", as well as a test descriptor.
 
     """
-    TEST_CHRC_UUID = '0x2A01'
+    TEST_CHRC_UUID = '0x2A29'
 
     def __init__(self, bus, index, service):
         Characteristic.__init__(
@@ -575,6 +577,49 @@ class AppearanceCharacteristic(Characteristic):
     def ReadValue(self, options):
         print('AppearanceCharacteristic Read: ' + repr(self.value))
         return self.value
+
+
+class ModeNameCharacteristic(Characteristic):
+    """
+    Dummy test characteristic. Allows writing arbitrary bytes to its value, and
+    contains "extended properties", as well as a test descriptor.
+
+    """
+    TEST_CHRC_UUID = '0x2A24'
+
+    def __init__(self, bus, index, service):
+        Characteristic.__init__(
+            self, bus, index,
+            self.TEST_CHRC_UUID,
+            ['read'],
+            service)
+        self.value = []
+
+    def ReadValue(self, options):
+        print('AppearanceCharacteristic Read: ' + repr(self.value))
+        return self.value
+
+
+class FirmwareVersionCharacteristic(Characteristic):
+    """
+    Dummy test characteristic. Allows writing arbitrary bytes to its value, and
+    contains "extended properties", as well as a test descriptor.
+
+    """
+    TEST_CHRC_UUID = '0x2A26'
+
+    def __init__(self, bus, index, service):
+        Characteristic.__init__(
+            self, bus, index,
+            self.TEST_CHRC_UUID,
+            ['read'],
+            service)
+        self.value = []
+
+    def ReadValue(self, options):
+        print('AppearanceCharacteristic Read: ' + repr(self.value))
+        return self.value
+
 
 def register_app_cb():
     print('GATT application registered')
