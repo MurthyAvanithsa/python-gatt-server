@@ -438,7 +438,7 @@ class FidoService(Service):
         #self.add_characteristic(FidoControlPointCharacteristic(bus, 0, self))
         #self.add_characteristic(FidoStatusPointCharacteristic(bus, 1, self))
         #self.add_characteristic(U2FControlPointLengthCharacteristic(bus, 2, self))
-        self.add_characteristic(U2FServiceRevisionCharacteristic(bus, 3, self))
+        self.add_characteristic(U2FServiceRevisionCharacteristic(bus, 0, self))
 
 
 class FidoControlPointCharacteristic(Characteristic):
