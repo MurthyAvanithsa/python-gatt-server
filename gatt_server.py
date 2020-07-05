@@ -431,76 +431,15 @@ class FidoService(Service):
     exercise various API functionality.
 
     """
-    TEST_SVC_UUID = '0xFFFD'
+    FIDO_SVC_UUID = '0xFFFD'
 
     def __init__(self, bus, index):
-        Service.__init__(self, bus, index, self.TEST_SVC_UUID, True)
-        #self.add_characteristic(FidoControlPointCharacteristic(bus, 0, self))
-        #self.add_characteristic(FidoStatusPointCharacteristi(bus, 1, self))
-        self.add_characteristic(U2FControlPointLengthCharacteristic(bus, 2, self))
-        #self.add_characteristic(U2FServiceRevisionCharacteristic(bus, 0, self))
+        Service.__init__(self, bus, index, self.FIDO_SVC_UUID, True)
+
+        self.add_characteristic(U2FServiceRevisionBitFieldCharacteristic(bus, 0, self))
 
 
-class FidoControlPointCharacteristic(Characteristic):
-    """
-    Dummy test characteristic. Allows writing arbitrary bytes to its value, and
-    contains "extended properties", as well as a test descriptor.
-
-    """
-    TEST_CHRC_UUID = 'F1D0FFF1-DEAA-ECEE-B42F-C9BA7ED623BB'
-
-    def __init__(self, bus, index, service):
-        Characteristic.__init__(
-            self, bus, index,
-            self.TEST_CHRC_UUID,
-            ['write'],
-            service)
-        self.value = []
-
-    def WriteValue(self, value, options):
-        print('TestCharacteristic Write: ' + repr(value))
-        self.value = value
-
-
-class FidoStatusPointCharacteristic(Characteristic):
-    """
-    Dummy test characteristic. Allows writing arbitrary bytes to its value, and
-    contains "extended properties", as well as a test descriptor.
-
-    """
-    TEST_CHRC_UUID = 'F1D0FFF2-DEAA-ECEE-B42F-C9BA7ED623BB'
-
-    def __init__(self, bus, index, service):
-        Characteristic.__init__(
-            self, bus, index,
-            self.TEST_CHRC_UUID,
-            ['notify'],
-            service)
-        self.value = []
-
-
-class U2FControlPointLengthCharacteristic(Characteristic):
-    """
-    Dummy test characteristic. Allows writing arbitrary bytes to its value, and
-    contains "extended properties", as well as a test descriptor.
-
-    """
-    TEST_CHRC_UUID = 'F1D0FFF3-DEAA-ECEE-B42F-C9BA7ED623BB'
-
-    def __init__(self, bus, index, service):
-        Characteristic.__init__(
-            self, bus, index,
-            self.TEST_CHRC_UUID,
-            ['read'],
-            service)
-        self.value = []
-
-    def ReadValue(self, options):
-        print('U2FControlPointLengthCharacteristic Read: ' + repr(self.value))
-        return self.value
-
-
-class U2FServiceRevisionCharacteristic(Characteristic):
+class U2FServiceRevisionBitFieldCharacteristic(Characteristic):
     """
     Dummy test characteristic. Allows writing arbitrary bytes to its value, and
     contains "extended properties", as well as a test descriptor.
@@ -512,13 +451,16 @@ class U2FServiceRevisionCharacteristic(Characteristic):
         Characteristic.__init__(
             self, bus, index,
             self.TEST_CHRC_UUID,
-            ['read', "write"],
+            ['read','write'],
             service)
         self.value = []
 
     def ReadValue(self, options):
-        print('TestCharacteristic Read: ' + repr(self.value))
+        print('AppearanceCharacteristic Read: ' + repr(self.value))
         return self.value
+
+    def WriteValue(self, value, options):
+        print('U2FServiceRevisionBitFieldCharacteristic Read: ' + repr(self.value))
 
 
 class DeviceInfoService(Service):
