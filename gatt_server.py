@@ -527,35 +527,14 @@ class DeviceInfoService(Service):
     exercise various API functionality.
 
     """
-    TEST_SVC_UUID = '0x1800'
+    TEST_SVC_UUID = '0x180A'
 
     def __init__(self, bus, index):
         Service.__init__(self, bus, index, self.TEST_SVC_UUID, True)
-        self.add_characteristic(DeviceInfoCharacteristic(bus, 0, self))
+
         self.add_characteristic(ManifacttureNameCharacteristic(bus, 1, self))
         self.add_characteristic(ModeNameCharacteristic(bus, 3, self))
         self.add_characteristic(FirmwareVersionCharacteristic(bus, 4, self))
-
-
-class DeviceInfoCharacteristic(Characteristic):
-    """
-    Dummy test characteristic. Allows writing arbitrary bytes to its value, and
-    contains "extended properties", as well as a test descriptor.
-
-    """
-    TEST_CHRC_UUID = '0x180A'
-
-    def __init__(self, bus, index, service):
-        Characteristic.__init__(
-            self, bus, index,
-            self.TEST_CHRC_UUID,
-            ['read'],
-            service)
-        self.value = []
-
-    def ReadValue(self, options):
-        print('DeviceNameRevisionCharacteristic Read: ' + repr(self.value))
-        return []
 
 
 class ManifacttureNameCharacteristic(Characteristic):
