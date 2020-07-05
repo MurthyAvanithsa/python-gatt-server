@@ -435,9 +435,9 @@ class FidoService(Service):
 
     def __init__(self, bus, index):
         Service.__init__(self, bus, index, self.TEST_SVC_UUID, True)
-        self.add_characteristic(FidoControlPointCharacteristic(bus, 0, self))
-        self.add_characteristic(FidoStatusPointCharacteristic(bus, 1, self))
-        self.add_characteristic(U2FControlPointLengthCharacteristic(bus, 2, self))
+        #self.add_characteristic(FidoControlPointCharacteristic(bus, 0, self))
+        #self.add_characteristic(FidoStatusPointCharacteristic(bus, 1, self))
+        #self.add_characteristic(U2FControlPointLengthCharacteristic(bus, 2, self))
         self.add_characteristic(U2FServiceRevisionCharacteristic(bus, 3, self))
 
 
@@ -496,7 +496,7 @@ class U2FControlPointLengthCharacteristic(Characteristic):
         self.value = []
 
     def ReadValue(self, options):
-        print('TestCharacteristic Read: ' + repr(self.value))
+        print('U2FControlPointLengthCharacteristic Read: ' + repr(self.value))
         return self.value
 
 
