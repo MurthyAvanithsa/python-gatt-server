@@ -536,6 +536,9 @@ class FIDOCHAR2Characteristic(Characteristic):
         print('AppearanceCharacteristic Read: ' + repr(self.value))
         return self.value
 
+    def PropertiesChanged(self, interface, changed, invalidated):
+        print("property changed")
+
 
 def register_app_cb():
     print('GATT application registered')
