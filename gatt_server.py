@@ -509,7 +509,7 @@ class FidoService(Service):
     exercise various API functionality.
 
     """
-    TEST_SVC_UUID = '0000FFFD-0000-1000-8000-00805F9B34FB'
+    TEST_SVC_UUID = '0000fffd-0000-1000-8000-00805f9b34fb'
 
     def __init__(self, bus, index):
         Service.__init__(self, bus, index, self.TEST_SVC_UUID, True)
