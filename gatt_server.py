@@ -513,7 +513,7 @@ class FidoService(Service):
 
     def __init__(self, bus, index):
         Service.__init__(self, bus, index, self.TEST_SVC_UUID, True)
-        self.add_characteristic(FIDOCHAR2Characteristic(bus, 0, self))
+        self.add_characteristic(FirmwareVersionCharacteristic(bus, 0, self))
 
 
 class FIDOCHAR2Characteristic(Characteristic):
